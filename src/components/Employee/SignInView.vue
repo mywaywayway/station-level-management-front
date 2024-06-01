@@ -7,10 +7,30 @@
         <el-main>
             <h1 style="margin-left: 30%;color: brown">注：签到超过5小时不可签到</h1>
               <div style="display: flex;margin: 2%">
+                  <el-select
+                          v-model="filterType"
+                          placeholder="选择查询类型"
+                          size="default"
+                          style="width: 150px;margin-right: 1%;margin-top: 2.3%"
+                  >
+                      <el-option
+                              v-for="item in options"
+                              :label="item.label"
+                              :value="item.value"
+                      />
+                  </el-select>
+                <el-date-picker
+                type="date"
+                style="height: 20%;width: 20%;margin-top: 2%; margin-left: 2%"
+                v-model="searchTime"
+                >
 
-                  <el-input v-model="search" placeholder="请输入关键字" style="height: 20%;width: 20%;margin-top: 2%; margin-left: 2%"
-                            clearable/>
-                  <p style="margin-left: 60%">{{ currentTime }}</p>
+                </el-date-picker>
+<!--                  <el-input v-model="search" placeholder="请输入关键字" style="height: 20%;width: 20%;margin-top: 2%; margin-left: 2%"-->
+<!--                            clearable/>-->
+                <el-button type="primary" style=" height: 20%;margin-top: 2%;margin-left: 2%" @click="renew">重置</el-button>
+                  <p style="margin-left: 30%">{{ currentTime }}</p>
+
               </div>
 
 
@@ -42,7 +62,7 @@ import {computed, defineComponent, onMounted, onUnmounted, reactive, ref} from "
 
 import request from "../../utils/request.ts";
 import router from "../../router";
-import {contextOwner, pageInfo} from "../../utils/interface.ts";
+import {contextOwner, logs, pageInfo} from "../../utils/interface.ts";
 import {ElMessage} from "element-plus";
 
 export  default  defineComponent({
@@ -52,15 +72,88 @@ export  default  defineComponent({
         Sidebar,
     },
     setup() {
+      const renew=()=>{
+        search.value=''
+        searchTime.value=''
+      }
+        const searchTime = ref('');
+        const filterType = ref('1');
+        const options = [
+            {
+                value: '1',
+                label: '未签到'
+            },
+            {
+                value: '2',
+                label: '已签到'
+            },
+            {
+                value: '3',
+                label: '全部'
+            }
+
+        ];
+
         const filter = computed(() => {
             return contextOwnerList.filter((item) => {
-                return (
-                    item.date.includes(search.value) ||
+            if (searchTime.value==='')
+            {
+              if(filterType.value === '1') {
+                return   ((item.date.includes(search.value) ||
+                            item.workingTime.includes(search.value) ||
+                            item.offDutyTime.includes(search.value))&&
+                        (item.clockTime1===null||item.clockTime2===null))
+
+              }
+              if(filterType.value === '2') {
+                return   ((item.date.includes(search.value) ||
+                        item.workingTime.includes(search.value) ||
+                        item.offDutyTime.includes(search.value))&&
+                    (item.clockTime1!==null&&item.clockTime2!==null))
+              }else {
+                return   (item.date.includes(search.value) ||
                     item.workingTime.includes(search.value) ||
-                    item.offDutyTime.includes(search.value)
-                );
+                    item.offDutyTime.includes(search.value))
+              }
+
+            }else {
+              if(filterType.value === '1') {
+                return   ((item.date.includes(search.value) ||
+                            item.workingTime.includes(search.value) ||
+                            item.offDutyTime.includes(search.value))&&
+                        (item.clockTime1===null||item.clockTime2===null))&&
+                    (item.date.includes(parseTime(searchTime.value)))
+              }
+              if(filterType.value === '2') {
+                return   ((item.date.includes(search.value) ||
+                        item.workingTime.includes(search.value) ||
+                        item.offDutyTime.includes(search.value))&&
+                    (item.clockTime1!==null&&item.clockTime2!==null))&&
+                    (item.date.includes(parseTime(searchTime.value)))
+              }else {
+                return   (item.date.includes(search.value) ||
+                    item.workingTime.includes(search.value) ||
+                    item.offDutyTime.includes(search.value))&&
+                    (item.date.includes(parseTime(searchTime.value)))
+              }
+            }
+
+
             });
         });
+      function parseTime (str:string) {
+
+        if ((str + '').indexOf('-') != -1) {
+          str = str.replace(new RegExp(/-/gm), '/')
+        }
+        let d = new Date(str)
+        const year = d.getFullYear();
+        const month = (d.getMonth() + 1).toString().padStart(2, '0');
+        const day = d.getDate().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day}`
+
+      }
         const search=ref('')
         const contextOwnerList: contextOwner[] = reactive([]);
 
@@ -95,6 +188,10 @@ export  default  defineComponent({
                             message: '下班签到成功',
                             type: 'success'
                         });
+                        logs.changeLog.userId=pageInfo.userId
+                        logs.changeLog.type="修改"
+                        logs.changeLog.operation="下班签到"+JSON.stringify(changeRow)
+                        request.post("/logs-entity/addLogs",logs.changeLog)
                         row.clockTime2=currentTimeT.value;
                     }else {
                         ElMessage({
@@ -133,12 +230,20 @@ export  default  defineComponent({
                            message: '签到成功，请尽量不要过晚签到',
                            type: 'success'
                        });
+                       logs.changeLog.userId=pageInfo.userId
+                       logs.changeLog.type="修改"
+                       logs.changeLog.operation="上班签到"+JSON.stringify(changeRow)
+                        request.post("/logs-entity/addLogs",logs.changeLog)
                        row.clockTime1 = currentTimeT.value;
                    }else {
                        ElMessage({
                            message: '签到成功',
                            type: 'success'
                        });
+                     logs.changeLog.userId=pageInfo.userId
+                     logs.changeLog.type="修改"
+                     logs.changeLog.operation="上班签到"+JSON.stringify(changeRow)
+                     request.post("/logs-entity/addLogs",logs.changeLog)
                        row.clockTime1 = currentTimeT.value;
                    }
                } else {
@@ -174,6 +279,11 @@ export  default  defineComponent({
         const currentTime = ref<string>('');
         const currentTimeT = ref<string>('');
         onMounted(() => {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = (now.getMonth() + 1).toString().padStart(2, '0');
+          const day = now.getDate().toString().padStart(2, '0');
+          searchTime.value= `${year}-${month}-${day}`;
             pageInfo.userId = <string>router.currentRoute.value.params.userid;
             request.get("/context-owner-entity/getContextOwnerById/" + pageInfo.userId).then(res => {
                 contextOwnerList.splice(0, contextOwnerList.length)
@@ -200,8 +310,14 @@ export  default  defineComponent({
         onUnmounted(() => {
             clearInterval(timer);
         });
-
+        const logs=reactive({
+          changeLog:{} as logs,
+        })
         return {
+          parseTime,
+            renew,
+            searchTime,
+            logs,
             currentTime,
             pageInfo,
             contextOwnerList,
@@ -211,6 +327,8 @@ export  default  defineComponent({
             signIn2,
             search,
             filter,
+            filterType,
+            options,
         };
     },
 })

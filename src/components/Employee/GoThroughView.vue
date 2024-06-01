@@ -188,7 +188,7 @@ import request from "../../utils/request.ts";
 import {useRouter} from "vue-router";
 import {ticket} from "../../utils/interface.ts";
 import {ElMessage} from "element-plus";
-
+import {logs} from "../../utils/interface.ts";
 export default defineComponent({
     name: "goThroughView",
     components: {
@@ -196,6 +196,11 @@ export default defineComponent({
         Head,
     },
     setup() {
+        const logs=reactive({
+          changeLogs:{} as logs,
+          deleteLogs:{} as logs,
+          addLogs:{} as logs,
+        })
         const deleteTicketId = reactive({
             deleteTicketId:''
         })
@@ -204,6 +209,10 @@ export default defineComponent({
                 if (res.data.code === 200){
                     ElMessage.success('删除成功')
                     deleteTicketDialogVisible.value = false
+                    logs.deleteLogs.userId=pageInfo.userId
+                    logs.deleteLogs.type='删除'
+                    logs.deleteLogs.operation+='删除通行记录'+JSON.stringify(deleteTicket)
+                    request.post("/logs-entity/addLogs",logs.deleteLogs)
                     request.post("/ticket-entity/getAllTicket").then(res => {
                         ticketList.splice(0,ticketList.length)
                         ticketList.push(...res.data.data)
@@ -225,10 +234,16 @@ export default defineComponent({
             if (changeTicket.paymentStatus === '未支付') {
                 changeTicket.payTime = ''
             }
+            // var operation=changeTicket;
+            // console.log(operation);
             request.post('/ticket-entity/updateTicketById', changeTicket).then(res => {
                 if (res.data.code === 200){
                     ElMessage.success('修改成功')
                     editTicketDialogVisible.value = false
+                    logs.changeLogs.userId=pageInfo.userId
+                    logs.changeLogs.type='修改'
+                    logs.changeLogs.operation+='修改为'+JSON.stringify(changeTicket)
+                    request.post("/logs-entity/addLogs",logs.changeLogs)
                     request.post("/ticket-entity/getAllTicket").then(res => {
                         ticketList.splice(0,ticketList.length)
                         ticketList.push(...res.data.data)
@@ -273,7 +288,7 @@ export default defineComponent({
             changeTicket.paymentStatus=row.paymentStatus
             changeTicket.payTime=row.payTime
             changeTicket.ticketId=row.ticketId
-
+            logs.changeLogs.operation='修改通行记录:从原来的'+JSON.stringify(changeTicket)
         }
         const onDeleteTicket = (row: ticket) => {
             if (row.paymentStatus === '已支付') {
@@ -291,6 +306,7 @@ export default defineComponent({
             deleteTicket.ticketId=row.ticketId
             deleteTicketDialogVisible.value=true
             deleteTicketId.deleteTicketId=row.ticketId
+            logs.deleteLogs.operation='删除通行记录'+JSON.stringify(deleteTicket)
         }
         const confirmAddTicket=()=>{
             if (addTicket.paymentStatus === '已支付') {
@@ -305,6 +321,11 @@ export default defineComponent({
              request.post('/ticket-entity/addTicket',addTicket).then(res=>{
                  if(res.data.code===200){
                      addTicketDialogVisible.value=false
+                      ElMessage.success('新增成功')
+                      logs.addLogs.userId=pageInfo.userId
+                      logs.addLogs.type='新增'
+                      logs.addLogs.operation='新增通行记录'+JSON.stringify(addTicket)
+                     request.post("/logs-entity/addLogs",logs.addLogs)
                      request.post("/ticket-entity/getAllTicket").then(res => {
                          ticketList.splice(0,ticketList.length)
                          ticketList.push(...res.data.data)
@@ -387,6 +408,7 @@ export default defineComponent({
             deleteTicket,
             confirmDeleteTicket,
             deleteTicketId,
+            logs
         }
     }
 

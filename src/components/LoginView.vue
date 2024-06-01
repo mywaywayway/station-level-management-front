@@ -7,13 +7,13 @@
                  <h1 style="margin: 5%;margin-left: 40%">LogIn</h1>
                 <div id="one">
                   <me id="icon1" theme="outline" size="40" fill="#333" :strokeWidth="2" strokeLinecap="butt"/>
-                  <el-input style="width: 40%" v-model="form.userId" clearable maxlength="20" show-word-limit></el-input>
+                  <el-input style="width: 40%" v-model="form.userId" clearable maxlength="20" placeholder="账号" show-word-limit></el-input>
                 </div>
 
                 <br>
                 <div id="two">
                   <keyboard-one theme="outline" size="40" fill="#333" :strokeWidth="2"/>
-                  <el-input style="width: 40%" v-model="form.password" show-password clearable maxlength="20"></el-input>
+                  <el-input style="width: 40%" v-model="form.password" show-password clearable placeholder="密码" maxlength="20"></el-input>
                     <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
                 </div>
                 <div id="three">
@@ -127,13 +127,30 @@ export default defineComponent({
       request.post("/user-entity/login/",form.value).then(res => {
         // console.log(res.data)
         // console.log(res.data.length)
-        if (res.data.code==200){
-          ElMessage.success("登录成功")
-            console.log(res.data.data.userId)
-          router.push({
-            path:'/employeeHome/'+res.data.data.userId
-          })
-        }else {
+        if (res.data.code==200) {
+          console.log(form.value.userType)
+          if (form.value.userType == "1") {
+            router.push({
+              path: '/employeeHome/' + res.data.data.userId
+            })
+            ElMessage.success("登录成功")
+
+          }
+          else if (form.value.userType == "2") {
+            router.push({
+              path: '/management/signInManagement/' + res.data.data.userId
+            })
+            ElMessage.success("登录成功")
+          }else{
+            router.push({
+              path: '/systemManagement/employeeManagement/' + res.data.data.userId
+            })
+            ElMessage.success("登录成功")
+
+          }
+
+        }
+        else {
           ElMessage.error(res.data.message)
         }
 

@@ -1,31 +1,23 @@
 import {createRouter, createWebHistory} from "vue-router";
-import LoginView from "../components/LoginView.vue";
+
+
 
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: HomeView
-    // },
 
     {
       path:'/',
       name:'login',
-      component:LoginView
+      component:()=> import('@/components/LoginView.vue')
     },
     {
         path:'/employeeHome/:userid',
         name:'employeeHome',
-           component:()=> import('@/components/Employee/Home.vue')
+        component:()=> import('@/components/Employee/Home.vue')
     },
-      {
-          path:'/employeeInfo/:userid',
-          name:'employeeInfo',
-          component:()=> import('@/components/Employee/PersonInfoView.vue')
-      },
+
       {
           path:'/BillManagement/:userid',
           name:'BillManagement',
@@ -41,6 +33,53 @@ const router = createRouter({
           name:'goThrough',
           component:()=> import('@/components/Employee/GoThroughView.vue')
       },
+
+      {
+          path:'/employee/QuotaTicket/:userid',
+          name:'quotaTicket',
+          component:()=>import('@/components/Employee/QuotaTicketView.vue')
+      },
+
+      {
+          path:'/employee/TollInvoice/:userid',
+          name:'employeeTollInvoice',
+          component:()=> import('@/components/Employee/TollInvoiceView.vue')
+      },
+      {
+          path:'/employeeInfo/:userid',
+          name:'employeeInfo',
+          component:()=> import('@/components/Employee/EmployeeInfoView.vue')
+      },
+      {
+          path:'/employee/application/:userid',
+          name:'application',
+          component:()=> import('@/components/Employee/ApplicationView.vue')
+      },
+      {
+          path:'/management/signInManagement/:userid',
+          name:'signInManagement',
+            component:()=> import('@/components/Management/SignInManagementView.vue')
+      },
+      {
+          path:'/management/applicationManagement/:userid',
+            name:'applicationManagement',
+          component:()=> import('@/components/Management/ApplicationManagementView.vue')
+      },
+      {
+          path:'/systemManagement/employeeManagement/:userid',
+          name:'employeeManagement',
+          component:()=> import('@/components/SystemManagement/EmployeeManagementView.vue')
+      },
+      {
+          path:'/systemManagement/applicationSystemManagement/:userid',
+            name:'applicationSystemManagement',
+            component:()=> import('@/components/SystemManagement/ApplicationSystemManagementView.vue')
+      },
+      {
+          path:'/systemManagement/logsUserView/:userid',
+            name:'logsUserView',
+            component:()=> import('@/components/SystemManagement/LogsManagementView.vue')
+      }
 
   ]
 })

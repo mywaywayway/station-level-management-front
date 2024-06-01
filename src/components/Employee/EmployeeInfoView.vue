@@ -1,6 +1,6 @@
 
 
-<template xmlns:el-button="http://www.w3.org/1999/html">
+<template>
 <Head></Head>
     <el-container>
         <el-aside width="200px">
@@ -187,6 +187,7 @@
 import {computed, defineComponent, onMounted, reactive, ref} from "vue";
 import Sidebar from "../Sidebar.vue";
 import Head from "../Head.vue";
+import {logs} from "../../utils/interface.ts";
 import {
     Iphone,
     Location,
@@ -197,12 +198,11 @@ import {
     Male,
 } from '@element-plus/icons-vue'
 import {ComponentSize, ElMessage} from "element-plus";
-
 import request from "../../utils/request.ts";
 import {changePassword, pageInfo, user} from "../../utils/interface.ts";
 import router from "../../router";
 export  default  defineComponent({
-    name: "PersonInfoView",
+   name:"PersonInfo",
     components: {
         Sidebar,
         Head
@@ -224,6 +224,10 @@ export  default  defineComponent({
                     if(res.data.code==200){
                         ElMessage.success("修改成功")
                         changePasswordDialogVisible.value=false
+                        logs.changeLog.type="修改"
+                        logs.changeLog.userId=personInfo.userId
+                        logs.changeLog.operation="修改密码为"+passwordData.newPassword
+                        request.post("/logs-entity/addLogs",logs.changeLog)
                     }else {
                         ElMessage.error("修改失败")
                     }
@@ -251,6 +255,8 @@ export  default  defineComponent({
                       personInfo.telephone=changePersonInfo.telephone
                       personInfo.birthday=changePersonInfo.birthday
                       personInfo.email=changePersonInfo.email
+                    logs.changeLog.operation+="修改为"+JSON.stringify(personInfo)
+                    request.post("/logs-entity/addLogs",logs.changeLog)
                   }else {
                       ElMessage.error("修改失败")
                   }
@@ -269,6 +275,9 @@ export  default  defineComponent({
             changePersonInfo.userType=personInfo.userType
             changePersonInfo.password=personInfo.password
             changePersonInfo.applicationRegistration=personInfo.applicationRegistration
+            logs.changeLog.userId=personInfo.userId
+            logs.changeLog.type="修改"
+            logs.changeLog.operation="修改基本信息,从原来的"+JSON.stringify(changePersonInfo)
         }
 
         const changePersonINfoDialogVisible = ref(false)
@@ -332,6 +341,9 @@ export  default  defineComponent({
                 marginRight: marginMap[size.value] || marginMap.default,
             }
         })
+        const logs=reactive({
+          changeLog:{} as logs,
+        })
         return {
             Head,
             Iphone,
@@ -353,6 +365,7 @@ export  default  defineComponent({
             changePasswordDialogVisible,
             onChangePassword,
             makeSureChangePassword,
+            logs,
         }
     }
 })
@@ -360,9 +373,7 @@ export  default  defineComponent({
 </script>
 
 <style scoped>
-.el-descriptions {
-    margin-top: 20px;
-}
+
 .cell-item {
     display: flex;
     align-items: center;

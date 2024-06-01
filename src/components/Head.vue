@@ -48,7 +48,7 @@
 
         <el-dialog
                 title="更改头像"
-                width="30%"
+                width="40%"
                 v-model="avatarDialogVisible"
                 center
         >
@@ -59,7 +59,8 @@
                     action=""
                     :http-request="upload"
                     :show-file-list="false">
-                <el-button class="avatar-update" style="margin-left: 30%">上传头像</el-button>
+              <br>
+                <el-button class="" style="margin-left: 50%">上传头像</el-button>
                 <br>
             </el-upload>
         </el-dialog>
@@ -72,11 +73,12 @@
 <script lang="ts">
 import { ArrowDown } from '@element-plus/icons-vue'
 import { defineComponent, onMounted, reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+
 import { pageInfo, user } from "../utils/interface.ts";
 import request from "../utils/request.ts";
-import axios from "axios";
+
 import upload from "@icon-park/vue-next/lib/icons/Upload";
+import router from "../router";
 
 export default defineComponent({
     name: "Head",
@@ -146,18 +148,16 @@ export default defineComponent({
             userId: "",
             userName: "",
         })
-        const onPersonInfo = () => {
 
-            router.push({
-                path: '/employeeInfo/' + pageInfo.userId
-            })
-        }
-        const router = useRouter()
+
+
 
         onMounted(() => {
             pageInfo.userId = <string>router.currentRoute.value.params.userid;
             request.get("/user-entity/getUserById/" + pageInfo.userId).then(res => {
-                pageInfo.userName = res.data.data.userName;
+
+              console.log(res.data.data)
+              pageInfo.userName = res.data.data.userName;
                 personInfo.applicationRegistration = res.data.data.applicationRegistration;
                 personInfo.birthday = res.data.data.birthday;
                 personInfo.email = res.data.data.email;
@@ -178,6 +178,12 @@ export default defineComponent({
                 path: '/'
             })
 
+        }
+        const onPersonInfo = () => {
+
+            router.push({
+                path:'/employeeInfo/'+pageInfo.userId,
+            })
         }
         return {
             onEsc,
