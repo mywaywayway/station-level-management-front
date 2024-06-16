@@ -77,6 +77,11 @@ export default defineComponent({
             path: '/systemManagement/logsUserView/'+pageInfo.userId
           })
         }
+        const onView=()=>{
+          router.push({
+            path: '/management/view/' +pageInfo.userId
+          })
+        }
         return {
             handleOpen,
             handleClose,
@@ -89,6 +94,7 @@ export default defineComponent({
           onEmployeeManagement,
           onApplicationManagement,
           onLogsManagement,
+          onView,
         }
     }
 })
@@ -97,15 +103,18 @@ export default defineComponent({
 </script>
 
 <template>
-    <div>
-        <el-container>
-            <el-aside width="200px">
+    <div style="background-color: #545c64">
+        <el-container  style="background-color: #545c64">
+            <el-aside width="200px" >
                 <el-menu
                     default-active="2"
                     class="el-menu-vertical-demo"
                     @open="handleOpen"
                     @close="handleClose"
                     default-openeds="['1']"
+                    background-color="#545c64"
+                    text-color="#fff"
+                    active-text-color="#ffd04b"
                 >
                     <el-sub-menu index="1" v-if="pageInfo.userType=='1'">
                         <template #title>
@@ -129,6 +138,7 @@ export default defineComponent({
                     <el-menu-item-group >
                       <el-menu-item index="1-1"  @click="onSignInManagement">排班管理</el-menu-item>
                       <el-menu-item index="1-2" @click="onApplication">材料申请审核</el-menu-item>
+                      <el-menu-item index="1-2" @click="onView">收费站数据</el-menu-item>
                     </el-menu-item-group>
 <!--                    <el-menu-item-group >-->
 <!--                      <el-menu-item index="1-3" @click="onGoThrough">通行查询</el-menu-item>-->

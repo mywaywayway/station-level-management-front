@@ -6,6 +6,7 @@ import Sidebar from "../Sidebar.vue";
 import request from "../../utils/request.ts";
 import router from "../../router";
 import {logs} from "../../utils/interface.ts";
+import * as XLSX from 'xlsx';
 
 export default defineComponent({
   components: {Sidebar, Head},
@@ -41,7 +42,7 @@ export default defineComponent({
     const filter=computed(()=>{
 
       return logViewList.filter((item)=>{
-        if (search==='')
+        if (search.value==='')
           return item
 
         if(searchType.value==='2') return item.type.includes(search.value)
@@ -52,6 +53,49 @@ export default defineComponent({
       search.value=''
 
     }
+    const exportDialogVisible=ref(false)
+
+    const onExport=()=>{
+      exportDialogVisible.value=true
+    }
+    const exportTime=reactive({
+      startTime:'',
+      endTime:''
+    })
+    const exportList:logs[]=reactive([])
+    function parseTime (str:string,flag :Number) {
+
+      if ((str + '').indexOf('-') != -1) {
+        str = str.replace(new RegExp(/-/gm), '/')
+      }
+      let d = new Date(str)
+      const year = d.getFullYear();
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      if (flag==1)
+        return `${year}-${month}-${day} 00:00:00`
+      else
+        return `${year}-${month}-${day} 23:59:59`
+
+
+    }
+    const confirmExport=()=>{
+      exportTime.startTime=parseTime(exportTime.startTime,1)
+      exportTime.endTime=parseTime(exportTime.endTime,2)
+      exportList.splice(0,exportList.length)
+      logViewList.forEach((item)=>{
+        if (item.creatDate>=exportTime.startTime&&item.creatDate<=exportTime.endTime){
+          exportList.push(item)
+        }
+      })
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(exportList);
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      XLSX.writeFile(wb, exportTime.startTime+"-"+exportTime.endTime+"日志.xlsx");
+      exportDialogVisible.value=false
+      exportTime.startTime=''
+      exportTime.endTime=''
+    }
     return {
       pageInfo,
       logViewList,
@@ -59,6 +103,11 @@ export default defineComponent({
       searchType,
       filter,
       reNew,
+      exportDialogVisible,
+      onExport,
+      exportTime,
+      confirmExport,
+      exportList,
     }
   }
 
@@ -69,7 +118,7 @@ export default defineComponent({
 <Head></Head>
   <el-container>
     <el-aside width="200px">
-      <Sidebar></Sidebar>
+      <Sidebar style="height: 500px"></Sidebar>
     </el-aside>
     <el-main>
       <h1 style="margin-left: 40%">日志管理</h1>
@@ -84,11 +133,13 @@ export default defineComponent({
         </el-select>
         <el-input placeholder="请输入关键字" style="width: 200px;margin-left: 1%" v-model="search"></el-input>
 
-        <el-button @click="reNew">重置</el-button>
+        <el-button @click="reNew" type="primary">重置</el-button>
+
+        <el-button type="primary" @click="onExport">导出</el-button>
       </div>
       <el-table
         :data="filter"
-        style="width: 100%;height: 450px">
+        style="width: 100%;height: 400px">
 <!--        <el-table-column-->
 <!--          prop="userId"-->
 <!--          label="用户ID"-->
@@ -123,6 +174,23 @@ export default defineComponent({
       </el-table>
     </el-main>
   </el-container>
+  <el-dialog
+  title="导出日志"
+  v-model="exportDialogVisible"
+  width="30%"
+  center
+  >
+   <el-form-item label="开始时间">
+     <el-date-picker v-model="exportTime.startTime" placeholder="输入导出起始时间"></el-date-picker>
+   </el-form-item>
+    <el-form-item label="结束时间">
+      <el-date-picker v-model="exportTime.endTime" placeholder="输入导出结束时间"></el-date-picker>
+    </el-form-item>
+    <template #footer>
+      <el-button @click="exportDialogVisible=false">取消</el-button>
+      <el-button type="primary" @click="confirmExport">确定</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped>

@@ -2,7 +2,7 @@
   <Head></Head>
   <el-container>
       <el-aside width="200px">
-          <Sidebar></Sidebar>
+        <Sidebar style="height: 500px"></Sidebar>
       </el-aside>
       <el-main>
           <div style="display: flex">
@@ -28,7 +28,7 @@
                         clearable/>
               <el-button type="primary" @click="onAddTollInvoice" style="margin-left: 60%">添加</el-button>
           </div>
-          <el-table :data="filter" style="width: 100%">
+          <el-table :data="filter" style="width: 100%;height: 400px">
               <el-table-column prop="ticketId" label="通行ID" width="auto" />
               <el-table-column prop="entryGate" label="进站点" width="auto" />
               <el-table-column prop="exitGate" label="出站点" width="auto" />

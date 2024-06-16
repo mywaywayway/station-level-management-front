@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div  style="background: #3b9bc9">
         <el-container>
             <el-header>
                 <el-row :gutter="20">
@@ -29,9 +29,9 @@
                                     <el-dropdown-item>
                                         <el-button @click="onPersonInfo">个人信息中心</el-button>
                                     </el-dropdown-item>
-                                    <el-dropdown-item>
-                                        <el-button @click="onAvatar">头像更换</el-button>
-                                    </el-dropdown-item>
+<!--                                    <el-dropdown-item>-->
+<!--                                        <el-button @click="onAvatar">头像更换</el-button>-->
+<!--                                    </el-dropdown-item>-->
                                     <el-dropdown-item>
                                         <el-button @click="onEsc">退出登录</el-button>
                                     </el-dropdown-item>
@@ -156,7 +156,7 @@ export default defineComponent({
             pageInfo.userId = <string>router.currentRoute.value.params.userid;
             request.get("/user-entity/getUserById/" + pageInfo.userId).then(res => {
 
-              console.log(res.data.data)
+              console.log(res.data)
               pageInfo.userName = res.data.data.userName;
                 personInfo.applicationRegistration = res.data.data.applicationRegistration;
                 personInfo.birthday = res.data.data.birthday;

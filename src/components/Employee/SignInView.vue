@@ -2,7 +2,7 @@
   <Head></Head>
   <el-container>
         <el-aside width="200px">
-            <Sidebar></Sidebar>
+          <Sidebar style="height: 500px"></Sidebar>
         </el-aside>
         <el-main>
             <h1 style="margin-left: 30%;color: brown">注：签到超过5小时不可签到</h1>
@@ -34,7 +34,7 @@
               </div>
 
 
-            <el-table :data="filter" style="width: 100%" >
+            <el-table :data="filter" style="width: 100%;height: 400px" >
                 <el-table-column  prop="date"  label="日期" width="auto" />
                 <el-table-column prop="workingTime" label="上班时间" width="auto" />
                 <el-table-column prop="offDutyTime" label="下班时间" width="auto" />
@@ -205,7 +205,7 @@ export  default  defineComponent({
             }
         }
         const signIn1 = (row :contextOwner) => {
-            if (!row.clockTime1===null){
+            if (!row.clockTime1!==null){
                 ElMessage({
                     message: '签到失败，已签到',
                     type: 'error'

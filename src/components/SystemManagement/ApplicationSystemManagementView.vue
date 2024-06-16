@@ -2,7 +2,7 @@
   <Head></Head>
   <el-container>
     <el-aside width="200px">
-      <Sidebar></Sidebar>
+      <Sidebar style="height: 500px"></Sidebar>
     </el-aside>
     <el-main>
       <h1 style="margin-left: 40%">用户注册管理</h1>
@@ -13,7 +13,7 @@
         </el-radio-group>
         <el-input v-model="filterType2" placeholder="请输入员工姓名或工号" style="width: 20%"></el-input>
       </div>
-      <el-table :data="filter">
+      <el-table :data="filter" style="height: 400px">
 
         <el-table-column prop="userName" label="员工姓名" width="auto"></el-table-column>
         <el-table-column prop="userAvatar" label="头像" width="auto">
@@ -26,7 +26,7 @@
         <el-table-column prop="email" label="邮箱" width="auto"></el-table-column>
         <el-table-column prop="telephone" label="电话" width="auto"></el-table-column>
         <el-table-column prop="workId" label="工号" width="auto"></el-table-column>
-        <el-table-column prop="password" label="密码" width="auto"></el-table-column>
+<!--        <el-table-column prop="password" label="密码" width="auto"></el-table-column>-->
         <el-table-column prop="applicationRegistration" label="状态">
           <template #default="scope">
             <el-tag v-if="scope.row.applicationRegistration==1" type="success">已注册</el-tag>
@@ -89,9 +89,9 @@
       <el-form-item label="电子邮箱" prop="email">
         <el-input v-model="form.changUser.email"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="form.changUser.password"></el-input>
-      </el-form-item>
+<!--      <el-form-item label="密码" prop="password">-->
+<!--        <el-input v-model="form.changUser.password"></el-input>-->
+<!--      </el-form-item>-->
 
     </el-form>
     <template #footer>

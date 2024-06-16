@@ -1,5 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 
+import {ElMessage} from "element-plus";
+
 
 
 
@@ -79,9 +81,30 @@ const router = createRouter({
           path:'/systemManagement/logsUserView/:userid',
             name:'logsUserView',
             component:()=> import('@/components/SystemManagement/LogsManagementView.vue')
+      },
+      {
+          path:'/management/view/:userid',
+          name:'managementView',
+          component:()=>import('@/components/View/PieChart.vue')
       }
 
   ]
-})
+
+});
+router.beforeEach((to, from, next) => {
+     if (to.path === '/') {
+         window.localStorage.removeItem('token')
+         next()
+     } else {
+            let token = window.localStorage.getItem('token')
+            if (token === null || token === '') {
+                ElMessage.error('请先登录')
+                next('/')
+            } else {
+                next()
+            }
+     }
+});
+
 export default router
 

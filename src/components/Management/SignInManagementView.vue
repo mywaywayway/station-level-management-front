@@ -3,8 +3,8 @@
 <template>
    <Head></Head>
   <el-container>
-    <el-aside width="200px">
-      <Sidebar></Sidebar>
+    <el-aside width="200px" style="height: 500px">
+      <Sidebar style="height: 500px"></Sidebar>
     </el-aside>
     <el-main>
       <h1 style="margin-left: 40%">排班</h1>
@@ -18,7 +18,7 @@
         <el-button @click="panduan">刷新</el-button>
         <el-button type="primary" style="margin-left: 40%" @click="onAddSignIn">排班</el-button>
       </div>
-      <el-table :data="filter" style="width: 100%" >
+      <el-table :data="filter" style="width: 100%;height: 400px" >
         <el-table-column prop="userName" label="员工" width="auto" />
         <el-table-column  prop="date"  label="日期" width="auto" />
         <el-table-column prop="workingTime" label="上班时间" width="auto" />
@@ -189,6 +189,10 @@ export default defineComponent({
       const confirmChange=()=>{
           let date=pageInfo.changeContextOwner.date
           pageInfo.changeContextOwner.date=parseTime(date)
+           let workingTime=pageInfo.changeContextOwner.workingTime
+           pageInfo.changeContextOwner.workingTime=parseTime1(workingTime)
+          let offDutyTime=pageInfo.changeContextOwner.offDutyTime
+            pageInfo.changeContextOwner.offDutyTime=parseTime1(offDutyTime)
            if (pageInfo.changeContextOwner.userId == '' || pageInfo.changeContextOwner.date == '' || pageInfo.changeContextOwner.workingTime == '' || pageInfo.changeContextOwner.offDutyTime == '') {
               ElMessage({
                 message: '请填写完整',
@@ -295,6 +299,21 @@ export default defineComponent({
         return `${year}-${month}-${day}`
 
       }
+
+       function parseTime1(str:string) {
+
+         if ((str + '').indexOf('-') != -1) {
+           str = str.replace(new RegExp(/-/gm), '/')
+         }
+         let d = new Date(str)
+         const year = d.getFullYear();
+         const month = (d.getMonth() + 1).toString().padStart(2, '0');
+         const day = d.getDate().toString().padStart(2, '0');
+         const hours = d.getHours().toString().padStart(2, '0');
+         const minutes = d.getMinutes().toString().padStart(2, '0');
+         const seconds = d.getSeconds().toString().padStart(2, '0');
+         return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+       }
 
       const updateCurrentTime = () => {
         const now = new Date();

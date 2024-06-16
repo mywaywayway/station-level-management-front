@@ -4,106 +4,123 @@
 <Head></Head>
     <el-container>
         <el-aside width="200px">
-            <Sidebar></Sidebar>
+          <Sidebar style="height: 500px"></Sidebar>
         </el-aside>
         <el-main style="margin-top: 2%">
+          <div style="display: flex">
+          <el-card  style="margin-right: 5%">
+            <el-image :src="personInfo.userAvatar" style=" height: 300px;width: 380px"></el-image>
+            <br>
+            <br>
+            <el-upload
+                action=""
+                :http-request="upload"
+                :show-file-list="false">
+              <br>
+              <el-button class="" style="margin-left: 50%">上传头像</el-button>
+              <br>
+            </el-upload>
+          </el-card>
+          <el-card>
             <el-radio-group v-model="size">
-                <el-radio value="large">Large</el-radio>
-                <el-radio value="default">Default</el-radio>
-                <el-radio value="small">Small</el-radio>
+              <el-radio value="large">Large</el-radio>
+              <el-radio value="default">Default</el-radio>
+              <el-radio value="small">Small</el-radio>
             </el-radio-group>
             <el-descriptions
                 class="margin-top"
-               style="margin-top: 5%"
+                style="margin-top: 5%"
                 :column="3"
                 :size="size"
                 border
             >
-<!--                <template #extra>-->
-<!--                    <el-button type="primary">Operation</el-button>-->
-<!--                </template>-->
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <user />
-                            </el-icon>
-                            用户ID
-                        </div>
-                    </template>
-                    {{personInfo.userId}}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <user />
-                            </el-icon>
-                            用户名
-                        </div>
-                    </template>
-                    {{personInfo.userName}}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <Male />
-                            </el-icon>
-                            性别
-                        </div>
-                    </template>
-                    {{personInfo.sexy}}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <iphone />
-                            </el-icon>
-                            手机号码
-                        </div>
-                    </template>
-                    {{ personInfo.telephone }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <location />
-                            </el-icon>
-                            生日
-                        </div>
-                    </template>
-                    {{ personInfo.birthday }}
-                </el-descriptions-item>
+              <!--                <template #extra>-->
+              <!--                    <el-button type="primary">Operation</el-button>-->
+              <!--                </template>-->
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <el-icon :style="iconStyle">
+                      <user />
+                    </el-icon>
+                    用户ID
+                  </div>
+                </template>
+                {{personInfo.userId}}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <el-icon :style="iconStyle">
+                      <user />
+                    </el-icon>
+                    用户名
+                  </div>
+                </template>
+                {{personInfo.userName}}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <el-icon :style="iconStyle">
+                      <Male />
+                    </el-icon>
+                    性别
+                  </div>
+                </template>
+                {{personInfo.sexy}}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <el-icon :style="iconStyle">
+                      <iphone />
+                    </el-icon>
+                    手机号码
+                  </div>
+                </template>
+                {{ personInfo.telephone }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <el-icon :style="iconStyle">
+                      <location />
+                    </el-icon>
+                    生日
+                  </div>
+                </template>
+                {{ personInfo.birthday }}
+              </el-descriptions-item>
 
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <office-building />
-                            </el-icon>
-                            工号
-                        </div>
-                    </template>
-                    {{ personInfo.workId }}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                    <template #label>
-                        <div class="cell-item">
-                            <el-icon :style="iconStyle">
-                                <Message />
-                            </el-icon>
-                           电子邮箱
-                        </div>
-                    </template>
-                    {{ personInfo.email }}
-                </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <el-icon :style="iconStyle">
+                      <office-building />
+                    </el-icon>
+                    工号
+                  </div>
+                </template>
+                {{ personInfo.workId }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    <el-icon :style="iconStyle">
+                      <Message />
+                    </el-icon>
+                    电子邮箱
+                  </div>
+                </template>
+                {{ personInfo.email }}
+              </el-descriptions-item>
             </el-descriptions>
 
             <el-button style="margin-left: 30%;margin-top: 5%" @click="onChangeInfo">修改基本个人信息</el-button>
             <el-button style="margin-left: 10%;margin-top:5% " @click="onChangePassword">修改密码</el-button>
+          </el-card>
+          </div>
         </el-main>
 
         <el-dialog
@@ -159,13 +176,13 @@
             width="30%"
             center>
             <el-form :v-model="passwordData">
-                <el-form-item>
-                    <el-input v-model="passwordData.oldPassword" show-password placeholder="请输入旧密码"></el-input>
+                <el-form-item label="输入现密码">
+                    <el-input v-model="passwordData.oldPassword" show-password placeholder="请输入现在的密码"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item label="输入新密码">
                     <el-input v-model="passwordData.newPassword" show-password placeholder="请输入新密码"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item label="确认新密码">
                     <el-input v-model="passwordData.makeSurePassword" show-password placeholder="请再次输入新密码"></el-input>
                 </el-form-item>
 
@@ -188,9 +205,10 @@ import {computed, defineComponent, onMounted, reactive, ref} from "vue";
 import Sidebar from "../Sidebar.vue";
 import Head from "../Head.vue";
 import {logs} from "../../utils/interface.ts";
+import upload from "@icon-park/vue-next/lib/icons/Upload";
 import {
     Iphone,
-    Location,
+    // Location,
     OfficeBuilding,
     Tickets,
     User,
@@ -209,29 +227,66 @@ export  default  defineComponent({
     },
 
     setup() {
-        const makeSureChangePassword=()=>{
+
+      const upload = (options: UploadRequestOptions): XMLHttpRequest => {
+        const file = options.file;
+        const formData = new FormData();
+        formData.append("smfile", file);
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/v2/upload");
+        xhr.setRequestHeader("Authorization", "xh6KJgvlS2ZWDNps1BEk24oz6lAH3p2v");
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response.data);
+            personInfo.userAvatar = response.data.url;
+            console.log(personInfo.userAvatar);
+
+            // console.log("上传成功");
+            request.post("/user-entity/updateUserById", personInfo)
+                .then(res => {
+                  // console.log(res);
+                  console.log("上传成功");
+                  location.reload();
+
+                })
+                .catch(err => {
+                  console.log(err);
+                  console.log("上传失败");
+                });
+          } else {
+            console.error("上传失败", xhr.statusText);
+          }
+        };
+        xhr.onerror = function () {
+          console.error("上传失败");
+        };
+        xhr.send(formData);
+        return xhr;
+      };
+
+      const makeSureChangePassword=()=>{
             if (passwordData.oldPassword == "" || passwordData.newPassword == "" || passwordData.makeSurePassword == "") {
                 ElMessage.error("请填写完整信息")
-            }
-            if (passwordData.oldPassword!=personInfo.password){
-                ElMessage.error("旧密码错误")
+              return;
             }
             if(passwordData.newPassword!=passwordData.makeSurePassword){
                 ElMessage.error("两次密码不一致")
+                return;
             }else {
-                personInfo.password=passwordData.newPassword
-                request.post("/user-entity/updateUserById/",personInfo).then((res)=>{
-                    if(res.data.code==200){
-                        ElMessage.success("修改成功")
-                        changePasswordDialogVisible.value=false
-                        logs.changeLog.type="修改"
-                        logs.changeLog.userId=personInfo.userId
-                        logs.changeLog.operation="修改密码为"+passwordData.newPassword
-                        request.post("/logs-entity/addLogs",logs.changeLog)
-                    }else {
-                        ElMessage.error("修改失败")
-                    }
-                })
+              request.get("/user-entity/updatePasswordById/"+pageInfo.userId+"/"+passwordData.oldPassword+"/"+passwordData.newPassword).then(res=>{
+                if(res.data.code==200){
+                  changePasswordDialogVisible.value=false
+                  ElMessage.success("修改成功")
+                  logs.changeLog.userId=pageInfo.userId
+                  logs.changeLog.type="修改"
+                  logs.changeLog.operation="修改密码"
+                  request.post("/logs-entity/addLogs",logs.changeLog)
+                }else {
+                  ElMessage.error("修改失败,"+res.data.message)
+                }
+              })
+
             }
         }
         const onChangePassword = () => {
@@ -366,6 +421,7 @@ export  default  defineComponent({
             onChangePassword,
             makeSureChangePassword,
             logs,
+            upload,
         }
     }
 })

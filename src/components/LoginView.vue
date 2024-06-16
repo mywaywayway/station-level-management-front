@@ -1,31 +1,39 @@
 <template>
     <div  id="main">
         <div style="display: flex;height: 10%;width: 10%">
+             <div id="image">
+               <el-image
+                   id="image"
+                 style="width: 100%;height: 100%"
+                 src="https://ts4.cn.mm.bing.net/th?id=OIP-C.nARA5vKXuvuDJ4xSZsCB3wHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2"
+                ></el-image>
+             </div>
+             <el-card id="form">
 
+                 <h1 style="margin: 3%;margin-left: 45%">登录</h1>
+                 <div id="one">
+                   <me id="icon1" theme="outline" size="40" fill="#333" :strokeWidth="2" strokeLinecap="butt"/>
+                   <el-input style="width: 40%" v-model="form.userId" clearable maxlength="20" placeholder="账号" show-word-limit></el-input>
+                 </div>
 
-              <div id="form">
-                 <h1 style="margin: 5%;margin-left: 40%">LogIn</h1>
-                <div id="one">
-                  <me id="icon1" theme="outline" size="40" fill="#333" :strokeWidth="2" strokeLinecap="butt"/>
-                  <el-input style="width: 40%" v-model="form.userId" clearable maxlength="20" placeholder="账号" show-word-limit></el-input>
-                </div>
-
-                <br>
-                <div id="two">
-                  <keyboard-one theme="outline" size="40" fill="#333" :strokeWidth="2"/>
-                  <el-input style="width: 40%" v-model="form.password" show-password clearable placeholder="密码" maxlength="20"></el-input>
-                    <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
-                </div>
-                <div id="three">
-                    <el-radio-group v-model="form.userType">
-                        <el-radio :value="1">员工</el-radio>
-                        <el-radio :value="2">管理员</el-radio>
-                        <el-radio :value="3">系统管理员</el-radio>
-                    </el-radio-group>
-                </div>
-                <el-button @click="login" id="loginButton">登录</el-button>
+                 <br>
+                 <div id="two">
+                   <keyboard-one theme="outline" size="40" fill="#333" :strokeWidth="2"/>
+                   <el-input style="width: 40%" v-model="form.password" show-password clearable placeholder="密码" maxlength="20"></el-input>
+                   <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+                 </div>
+                 <div id="three">
+                   <el-radio-group v-model="form.userType">
+                     <el-radio :value="1">员工</el-radio>
+                     <el-radio :value="2">管理员</el-radio>
+                     <el-radio :value="3">系统管理员</el-radio>
+                   </el-radio-group>
+                 </div>
+                 <el-button @click="login" id="loginButton">登录</el-button>
                  <el-button id="registerButton" @click="registerButton">注册</el-button>
-              </div>
+
+             </el-card>
+
         </div>
 
     </div>
@@ -125,25 +133,24 @@ export default defineComponent({
     const login = () => {
 
       request.post("/user-entity/login/",form.value).then(res => {
-        // console.log(res.data)
-        // console.log(res.data.length)
+      console.log(res.data.message)
         if (res.data.code==200) {
-          console.log(form.value.userType)
+           localStorage.setItem("token",res.data.message);
           if (form.value.userType == "1") {
             router.push({
-              path: '/employeeHome/' + res.data.data.userId
+              path: '/signIn/' + form.value.userId
             })
             ElMessage.success("登录成功")
 
           }
           else if (form.value.userType == "2") {
             router.push({
-              path: '/management/signInManagement/' + res.data.data.userId
+              path: '/management/signInManagement/' + form.value.userId
             })
             ElMessage.success("登录成功")
           }else{
             router.push({
-              path: '/systemManagement/employeeManagement/' + res.data.data.userId
+              path: '/systemManagement/employeeManagement/' + form.value.userId
             })
             ElMessage.success("登录成功")
 
@@ -221,12 +228,22 @@ export default defineComponent({
   left: 0;
   background-color: #fff8f8;
 }
+
+#image {
+  position: absolute;
+  width: 40%;
+  height: 55%;
+  top: 25%;
+  left: 15%;
+  padding-top: 0;
+  border: 0;
+}
 #form{
   position: absolute;
   width: 40%;
   height: 50%;
   top: 25%;
-  left: 35%;
+  left: 55%;
     padding: 1%;
   background-color: white;
 }

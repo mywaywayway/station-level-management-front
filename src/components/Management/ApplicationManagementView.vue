@@ -2,7 +2,7 @@
   <Head></Head>
   <el-container>
     <el-aside width="200px">
-      <Sidebar></Sidebar>
+      <Sidebar style="height: 500px"></Sidebar>
     </el-aside>
     <el-main>
 
@@ -33,7 +33,7 @@
         <el-button type="primary" @click="onAddApplication" style="margin-left: 35%">新增</el-button>
       </div>
 
-      <el-table :data="filter" style="width: 100%">
+      <el-table :data="filter" style="width: 100%;height: 400px">
         <el-table-column prop="requesterName" label="申请人" width="auto" />
         <el-table-column prop="itemName" label="申请物品" width="auto" />
         <el-table-column prop="quantity" label="申请数量" width="auto" />

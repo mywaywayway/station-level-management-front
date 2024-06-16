@@ -2,7 +2,7 @@
 <Head></Head>
   <el-container>
     <el-aside width="200px">
-      <Sidebar></Sidebar>
+      <Sidebar style="height: 500px"></Sidebar>
     </el-aside>
     <el-main>
       <h1 style="margin-left: 40%">用户信息管理</h1>
@@ -27,7 +27,7 @@
          </el-select>
          <el-input v-model="filterType2" placeholder="请输入员工姓名或工号" style="width: 20%;margin-left: 2%"></el-input>
        </div>
-      <el-table :data="filter">
+      <el-table :data="filter" style="height: 400px">
 
         <el-table-column prop="userName" label="员工姓名" width="auto"></el-table-column>
         <el-table-column prop="userAvatar" label="头像" width="auto">

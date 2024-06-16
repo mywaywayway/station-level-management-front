@@ -102,3 +102,16 @@ export  interface  logs{
     userId:string
     userName?:string
 }
+
+export interface ticketsNumber{
+   month:string
+   count:number
+}
+export interface ticketsMoney{
+    month:string
+    total_income:number
+}
+export interface material{
+    name:string
+    number:number
+}

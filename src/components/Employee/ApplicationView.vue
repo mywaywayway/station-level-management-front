@@ -2,7 +2,7 @@
  <Head></Head>
   <el-container>
       <el-aside width="200px">
-          <Sidebar></Sidebar>
+        <Sidebar style="height: 500px"></Sidebar>
       </el-aside>
       <el-main>
 

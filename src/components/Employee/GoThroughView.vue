@@ -2,7 +2,7 @@
     <Head></Head>
     <el-container>
         <el-aside width="200px">
-            <Sidebar></Sidebar>
+          <Sidebar style="height: 500px"></Sidebar>
         </el-aside>
         <el-main>
             <div style="display: flex">
@@ -17,9 +17,9 @@
 
             <el-table
             :data="filter"
-            style="width: 100%"
+            style="width: 100%;height: 400px"
             >
-
+              <el-table-column prop="ticketId" label="通行ID" width="auto"></el-table-column>
                 <el-table-column prop="plateNumber" label="车牌号" width="auto" />
                 <el-table-column prop="entranceStation" label="进站点" width="auto" />
                 <el-table-column prop="entranceTime" label="出站时间" width="auto" />
@@ -306,7 +306,6 @@ export default defineComponent({
             deleteTicket.ticketId=row.ticketId
             deleteTicketDialogVisible.value=true
             deleteTicketId.deleteTicketId=row.ticketId
-            logs.deleteLogs.operation='删除通行记录'+JSON.stringify(deleteTicket)
         }
         const confirmAddTicket=()=>{
             if (addTicket.paymentStatus === '已支付') {
